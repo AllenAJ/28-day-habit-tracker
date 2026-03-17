@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "28 Days Habit Tracker",
+  "description": "Lightweight daily habit tracker that runs entirely in your browser.",
+  "version": "1.0.1",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "28 Days Habit Tracker",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

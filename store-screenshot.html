@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ZeroGPU Habit Tracker – Store screenshot</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b0b0b;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: #f5f1e8;
+    }
+    .frame {
+      width: 1280px;
+      height: 800px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b0b0b;
+    }
+    .popup-mock {
+      width: 360px;
+      padding: 14px 14px 10px;
+      background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 38%, transparent 70%);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.5);
+    }
+    .header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .header h1 { font-family: ui-serif, Georgia, serif; font-size: 22px; font-weight: 500; margin: 0; }
+    .date { font-size: 11px; color: rgba(245,241,232,0.62); }
+    .new-habit { display: flex; gap: 6px; margin-bottom: 10px; }
+    .new-habit input {
+      flex: 1; padding: 8px 10px; font-size: 13px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+      color: #f5f1e8;
+    }
+    .new-habit input::placeholder { color: rgba(245,241,232,0.42); }
+    .new-habit button {
+      width: 34px; height: 34px; border: none; border-radius: 999px;
+      background: rgba(245,241,232,0.92); color: #111; font-size: 18px; font-weight: 600;
+    }
+    .habit {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; margin-bottom: 4px; border-radius: 14px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    }
+    .checkbox {
+      width: 18px; height: 18px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .checkbox.checked { border-color: rgba(245,241,232,0.55); background: rgba(245,241,232,0.16); }
+    .checkbox.checked::after { content: ""; width: 10px; height: 10px; border-radius: 3px; background: rgba(245,241,232,0.9); }
+    .habit-title { flex: 1; font-size: 13px; }
+    .habit-title.done { text-decoration: line-through; color: rgba(245,241,232,0.62); }
+    .habit-meta { font-size: 11px; color: rgba(245,241,232,0.62); margin-top: 2px; }
+    .habit-main { flex: 1; }
+    .footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 11px; color: rgba(245,241,232,0.62);
+    }
+    .link-btn { border: none; background: none; color: rgba(245,241,232,0.92); cursor: pointer; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="popup-mock">
+      <header class="header">
+        <h1>Habits</h1>
+        <span class="date">Mon, Mar 16</span>
+      </header>
+      <section class="new-habit">
+        <input type="text" placeholder="Add a new habit..." readonly />
+        <button>+</button>
+      </section>
+      <section class="habits">
+        <div class="habit">
+          <div class="checkbox checked"></div>
+          <div class="habit-main">
+            <div class="habit-title done">Drink water</div>
+            <div class="habit-meta">Current streak: 7 days</div>
+          </div>
+        </div>
+        <div class="habit">
+          <div class="checkbox checked"></div>
+          <div class="habit-main">
+            <div class="habit-title done">Read 10 minutes</div>
+            <div class="habit-meta">Current streak: 3 days</div>
+          </div>
+        </div>
+        <div class="habit">
+          <div class="checkbox"></div>
+          <div class="habit-main">
+            <div class="habit-title">Exercise</div>
+            <div class="habit-meta">No streak yet</div>
+          </div>
+        </div>
+      </section>
+      <section class="footer">
+        <span>2/3 done today</span>
+        <button type="button" class="link-btn">Reset today</button>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

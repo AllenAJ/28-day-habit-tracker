@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>28 Days Habit Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>Habits</h1>
+        <div class="date" id="todayLabel"></div>
+      </header>
+
+      <section class="new-habit">
+        <input
+          id="newHabitInput"
+          type="text"
+          placeholder="Add a new habit..."
+          maxlength="80"
+        />
+        <button id="addHabitBtn" aria-label="Add habit">+</button>
+      </section>
+
+      <section class="habits" id="habitsList">
+        <!-- Habits are rendered here -->
+      </section>
+
+      <section class="footer">
+        <span id="statsText"></span>
+        <button id="resetTodayBtn" class="link-btn">Reset today</button>
+      </section>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
+
