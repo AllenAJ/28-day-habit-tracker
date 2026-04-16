@@ -18,3 +18,13 @@ This is a lightweight daily habit tracker that runs as a Chrome extension. It st
 4. Select this `Habit tracker Extension` folder.
 5. Click the extension icon in the toolbar to open the habit tracker popup.
 
+### ZeroGPU SDK integration
+
+The extension initializes the ZeroGPU Browser SDK in an offscreen document so it can run in a DOM-capable context under MV3.
+
+Notes:
+- SDK state is managed by the service worker and offscreen page (`background.js` + `offscreen.js`).
+- Bundled runtime assets are local under `vendor/` (no remotely hosted scripts).
+- ONNX Runtime WASM binaries are packaged locally (`vendor/ort-wasm-simd.wasm`, `vendor/ort-wasm.wasm`).
+- A hidden debug panel is available in the popup with `Ctrl+Shift+D` to inspect SDK init status.
+

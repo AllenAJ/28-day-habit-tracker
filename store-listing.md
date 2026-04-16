@@ -4,6 +4,25 @@ Paste these into the store form.
 
 ---
 
+## Common publish blockers (Chrome Web Store)
+
+If publishing is blocked with:
+
+- "A justification for host permission use is required"
+- "A justification for offscreen is required"
+
+Go to **Privacy practices** and fill:
+
+- `offscreen justification`
+- `Host permission justification`
+- `Justification (remote code)` (if the form requires text)
+
+Use the exact copy in the **Privacy practices tab** section below.
+
+Also verify your **Single purpose description** still matches the current build behavior.
+
+---
+
 ## Title (from package – keep as is)
 **28 Days Habit Tracker**
 
@@ -95,13 +114,23 @@ Provide a simple daily habit tracker in the Chrome toolbar. Users can add habits
 The extension needs the "storage" permission to save the user's habit list and daily completion state so that habits and progress persist when the user closes the browser or reopens the extension. Data is stored only in Chrome's built-in extension storage (chrome.storage.sync). No data is sent to any external server.
 ```
 
+### offscreen justification
+```
+The extension uses an offscreen document to run background SDK logic that requires a window/DOM context, which is not available in a Manifest V3 service worker. This offscreen context is used only for background runtime tasks and internal status checks; it does not present UI to the user.
+```
+
+### host permission justification
+```
+The extension requests host permissions for https://*.zerogpu.ai/* and https://*.workers.dev/* so the bundled SDK can securely communicate with ZeroGPU orchestration endpoints over HTTPS/WebSocket for model runtime initialization and task handling. These permissions are not used for injecting scripts into websites or reading page content.
+```
+
 ### Are you using remote code?
 Select: **No, I am not using Remote code**
 
 ### Justification (remote code)
 Leave **empty**, or if the form requires text, paste:
 ```
-This extension does not use remote code. All JavaScript is included in the extension package. No external scripts, no eval(), no dynamically loaded code from the network.
+This extension does not use remote code. All JavaScript and WebAssembly are included in the extension package (vendor/ folder). There are no dynamic import() calls, no eval(), no new Function(), and no scripts loaded from CDNs or external URLs at runtime.
 ```
 
 ---

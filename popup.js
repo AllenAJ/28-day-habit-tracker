@@ -1,4 +1,5 @@
 const STORAGE_KEY = "zerogpu_habits_v1";
+let debugModeEnabled = false;
 
 function getTodayKey() {
   const d = new Date();
@@ -186,6 +187,74 @@ async function handleResetToday() {
   updateStats(state);
 }
 
+function formatDebugStatus(state) {
+  if (!state) {
+    return "No status data from background service worker.";
+  }
+
+  return [
+    `status: ${state.status}`,
+    `initialized: ${state.initialized}`,
+    `env: ${state.env || "unknown"}`,
+    `lastAttemptAt: ${state.lastAttemptAt || "never"}`,
+    `lastSuccessAt: ${state.lastSuccessAt || "never"}`,
+    `lastErrorAt: ${state.lastErrorAt || "never"}`,
+    `lastError: ${state.lastErrorMessage || "none"}`,
+  ].join("\n");
+}
+
+async function requestBackgroundDebugStatus(forceInit = false) {
+  const type = forceInit ? "zerogpu:forceInit" : "zerogpu:getStatus";
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type }, (response) => {
+      if (chrome.runtime.lastError) {
+        resolve({
+          ok: false,
+          error: chrome.runtime.lastError.message,
+        });
+        return;
+      }
+      resolve(response || { ok: false, error: "No response from background." });
+    });
+  });
+}
+
+async function renderDebugPanelStatus(forceInit = false) {
+  const debugStatusEl = document.getElementById("debugStatusText");
+  debugStatusEl.textContent = "Loading SDK status...";
+
+  const response = await requestBackgroundDebugStatus(forceInit);
+  if (!response.ok) {
+    debugStatusEl.textContent = `Failed to load SDK status.\n${response.error || "Unknown error"}`;
+    return;
+  }
+
+  debugStatusEl.textContent = formatDebugStatus(response.state);
+}
+
+function setDebugMode(enabled) {
+  debugModeEnabled = enabled;
+  const panel = document.getElementById("debugPanel");
+  panel.classList.toggle("hidden", !enabled);
+  if (enabled) {
+    void renderDebugPanelStatus(false);
+  }
+}
+
+function setupDebugMode() {
+  const refreshBtn = document.getElementById("debugRefreshBtn");
+  refreshBtn.addEventListener("click", () => {
+    void renderDebugPanelStatus(true);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "d") {
+      event.preventDefault();
+      setDebugMode(!debugModeEnabled);
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("todayLabel").textContent = formatTodayLabel();
 
@@ -200,6 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
   resetBtn.addEventListener("click", handleResetToday);
+  setupDebugMode();
 
   const state = await loadState();
   renderHabits(state);
