@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "28 Days Habit Tracker",
-  "description": "Lightweight daily habit tracker that runs entirely in your browser.",
-  "version": "1.0.3",
+  "description": "Track daily habits in your toolbar, with optional habit-related AI via ZeroGPU when you use those features.",
+  "version": "1.0.4",
   "action": {
     "default_popup": "popup.html",
     "default_title": "28 Days Habit Tracker",

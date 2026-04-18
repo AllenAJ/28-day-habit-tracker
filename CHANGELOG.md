@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## 1.0.4 - 2026-04-18
+
+### Changed
+- `manifest.json` short description now states a **single** product: daily habit tracking **with optional habit-related AI** via ZeroGPU (addresses Chrome Web Store single-purpose review feedback).
+- Popup header includes a short tagline so the in-extension UI matches the declared purpose.
+- `store-listing.md`, `README.md`, and `privacy-policy.html` updated so listing text, single-purpose field, and privacy disclosures align (habit data local by default; optional AI may contact ZeroGPU when those features are used).
+
 ## 1.0.3 - 2026-04-17
 
 ### Added

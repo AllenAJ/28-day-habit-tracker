@@ -26,28 +26,34 @@ Also verify your **Single purpose description** still matches the current build 
 ## Title (from package – keep as is)
 **28 Days Habit Tracker**
 
-## Summary (from package – keep as is)
-**Lightweight daily habit tracker that runs entirely in your browser.**
+## Summary (short description – paste into “Summary” / match manifest)
+**Track daily habits in your toolbar, with optional habit-related AI via ZeroGPU when you use those features.**
 
 ---
 
 ## Description (paste into "Description" field)
 
-Track daily habits without leaving Chrome. 28 Days Habit Tracker is a minimal extension that lives in your browser toolbar—no accounts, no sync to external servers, no clutter.
+28 Days Habit Tracker is one focused product: **daily habit tracking in your Chrome toolbar**, with **optional habit-related AI** powered by the bundled ZeroGPU Browser SDK when those features are used (for example summarization or classification tied to your habits). It is not a general-purpose AI assistant for arbitrary tasks unrelated to the habit experience.
 
-**What it does**
+**Habit tracking**
 • Add habits with one line each (e.g. "Drink water", "Read 10 min", "Exercise")
 • Check off each habit for today with a single click
 • See your current streak in days for every habit
 • View how many habits you’ve completed today at a glance
 • Reset today’s checkmarks anytime with one button
 
-**Why use it**
-• **Private** – Data stays in your browser using Chrome’s built-in storage. Optionally syncs across your Chrome profile if you use Chrome Sync; no third-party servers.
-• **Fast** – Open the popup, tick habits, close. No loading screens or sign-in.
-• **Simple** – No categories, tags, or complexity. Just a list and a streak.
+**Optional AI (same product, habit-related)**
+• The ZeroGPU SDK runs in a background offscreen context so ML/runtime code can load under Manifest V3
+• When habit-related AI features are used, the extension may connect to ZeroGPU over HTTPS/WebSocket to run those features
 
-**Perfect for** daily goals, mindfulness routines, hydration, reading, exercise, or any small habit you want to build. Install and start tracking in seconds.
+**Privacy**
+• Your habit list and completion history are stored in Chrome extension storage by default
+• If you use ZeroGPU-dependent features, habit-related content needed for those features may be sent to ZeroGPU’s services—see the privacy policy linked in the listing
+
+**Why use it**
+• **Focused** – One purpose: habits in the toolbar, with optional AI only in service of that experience
+• **Fast** – Open the popup, tick habits, close
+• **Simple** – No accounts required for basic habit tracking
 
 ---
 
@@ -106,22 +112,22 @@ Paste the following into each field. Then complete **Data usage** and **Privacy 
 
 ### Single purpose description
 ```
-Provide a simple daily habit tracker in the Chrome toolbar. Users can add habits, mark them complete for the current day, and view streak counts. All data stays in the browser.
+Provide daily habit tracking in the Chrome toolbar, including optional habit-related AI features powered by the bundled ZeroGPU Browser SDK (for example summarization or classification tied to the user’s habits). Users add habits, mark them complete for the current day, and view streak counts. Habit data is stored in Chrome extension storage by default; when optional AI features are used, habit-related content may be sent to ZeroGPU only as needed for those features.
 ```
 
 ### storage justification
 ```
-The extension needs the "storage" permission to save the user's habit list and daily completion state so that habits and progress persist when the user closes the browser or reopens the extension. Data is stored only in Chrome's built-in extension storage (chrome.storage.sync). No data is sent to any external server.
+The extension needs the "storage" permission to save the user's habit list and daily completion state so that habits and progress persist when the user closes the browser or reopens the extension. Data is stored in Chrome's built-in extension storage (chrome.storage.sync). Optional AI features may transmit habit-related data to ZeroGPU when the user uses those features.
 ```
 
 ### offscreen justification
 ```
-The extension uses an offscreen document to run background SDK logic that requires a window/DOM context, which is not available in a Manifest V3 service worker. This offscreen context is used only for background runtime tasks and internal status checks; it does not present UI to the user.
+The extension uses an offscreen document to run the bundled ZeroGPU Browser SDK and related ML runtime in a window/DOM context, which is not available in a Manifest V3 service worker. This supports optional habit-related AI features that are part of the same habit-tracking product. The offscreen page does not present UI to the user.
 ```
 
 ### host permission justification
 ```
-The extension requests host permissions for https://*.zerogpu.ai/* and https://*.workers.dev/* so the bundled SDK can securely communicate with ZeroGPU orchestration endpoints over HTTPS/WebSocket for model runtime initialization and task handling. These permissions are not used for injecting scripts into websites or reading page content.
+The extension requests host permissions for https://*.zerogpu.ai/* and https://*.workers.dev/* so the bundled ZeroGPU SDK can communicate with ZeroGPU orchestration endpoints over HTTPS/WebSocket for optional habit-related AI features (for example model runtime initialization and inference). These permissions are not used for injecting scripts into websites or reading arbitrary page content.
 ```
 
 ### Are you using remote code?
@@ -138,7 +144,12 @@ This extension does not use remote code. All JavaScript and WebAssembly are incl
 ### Data usage
 
 **What user data do you plan to collect?**  
-Leave **all checkboxes unchecked**. The extension does not collect or transmit user data to the developer or any third party; it only stores habit names and completion dates locally in the browser (Chrome storage).
+Disclose accurately based on your build:
+
+- **Habit names and completion dates** are stored locally in Chrome extension storage for core functionality.
+- **Optional AI:** When the user uses ZeroGPU-dependent features, **habit-related content** needed to run those features may be transmitted to ZeroGPU (third-party processor) over the network. Select the checkbox(es) in the form that best match this (often **“App activity”** and/or **“Other user-generated content”**—use what Chrome’s form offers and describe it in the free-text field if required).
+
+If a question asks whether data is sold: answer **No** (you are not selling habit data).
 
 **Certifications** – check all three:
 - ☑ I do not sell or transfer user data to third parties, outside of the approved use cases  
