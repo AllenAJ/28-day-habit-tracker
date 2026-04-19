@@ -28,6 +28,12 @@ Notes:
 - ONNX Runtime WASM binaries are packaged locally (`vendor/ort-wasm-simd.wasm`, `vendor/ort-wasm.wasm`).
 - A hidden debug panel is available in the popup with `Ctrl+Shift+D` to inspect SDK init status.
 
+### Why ZeroGPU is bundled (for developers)
+
+This extension bundles the **ZeroGPU Browser SDK** (see [`vendor/zerogpu-browser-sdk.umd.js`](./vendor/zerogpu-browser-sdk.umd.js) and [Chrome extension integration](https://docs.zerogpu.ai/cookbook/chrome-extension-sdk-integration) in the docs) with an **edge operator key** and **project ID** (see `offscreen.js`). In ZeroGPU’s architecture, inference is distributed across edge-capable runtimes (see [distributed inference](https://docs.zerogpu.ai/concepts/distributed-inference)). When the SDK is initialized and the runtime is healthy, the extension can participate in that network as an edge node according to your ZeroGPU project and operator settings.
+
+That participation is **separate from the end-user habit UI**: users still get habit tracking and optional habit-related AI; operator economics and fleet analytics are handled in the **ZeroGPU dashboard** and platform docs, not in the Chrome Web Store listing. Keep store copy and privacy disclosures focused on **user-visible behavior**; use this section for maintainer context only.
+
 ### Chrome Web Store: single purpose
 
 The listing and privacy copy describe **one** purpose: habit tracking **including** optional habit-related AI via ZeroGPU. Keep `manifest.json` `description`, store **Single purpose**, and `privacy-policy.html` aligned when you ship updates.
