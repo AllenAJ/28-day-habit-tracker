@@ -1,4 +1,6 @@
 const STORAGE_KEY = "zerogpu_habits_v1";
+const SDK_PREF_KEY = "zerogpu_sdk_enabled_v1";
+const OPTIONAL_ORIGINS = ["https://*.zerogpu.ai/*", "https://*.workers.dev/*"];
 let debugModeEnabled = false;
 
 function getTodayKey() {
@@ -27,6 +29,110 @@ async function saveState(state) {
   return new Promise((resolve) => {
     chrome.storage.sync.set({ [STORAGE_KEY]: state }, () => resolve());
   });
+}
+
+async function getSdkEnabledPreference() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(SDK_PREF_KEY, (result) => resolve(result[SDK_PREF_KEY] === true));
+  });
+}
+
+async function setSdkEnabledPreference(enabled) {
+  return new Promise((resolve) => {
+    chrome.storage.sync.set({ [SDK_PREF_KEY]: enabled }, () => resolve());
+  });
+}
+
+async function hasSdkHostPermissions() {
+  return new Promise((resolve) => {
+    chrome.permissions.contains({ origins: OPTIONAL_ORIGINS }, (granted) => resolve(granted));
+  });
+}
+
+async function requestSdkHostPermissions() {
+  return new Promise((resolve) => {
+    chrome.permissions.request({ origins: OPTIONAL_ORIGINS }, (granted) => resolve(granted));
+  });
+}
+
+async function removeSdkHostPermissions() {
+  return new Promise((resolve) => {
+    chrome.permissions.remove({ origins: OPTIONAL_ORIGINS }, (removed) => resolve(removed));
+  });
+}
+
+async function notifyBackgroundDisableSdk() {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: "zerogpu:disable" }, () => resolve());
+  });
+}
+
+function setSdkControlsState(enabled, permissionsGranted) {
+  const btn = document.getElementById("sdkToggleBtn");
+  const status = document.getElementById("sdkStatusText");
+
+  if (enabled && permissionsGranted) {
+    btn.textContent = "Disable";
+    status.textContent = "Enabled (host access granted)";
+    return;
+  }
+
+  btn.textContent = "Enable";
+  status.textContent = "Disabled";
+}
+
+async function refreshSdkControls() {
+  const [enabled, permissionsGranted] = await Promise.all([
+    getSdkEnabledPreference(),
+    hasSdkHostPermissions(),
+  ]);
+
+  setSdkControlsState(enabled, permissionsGranted);
+
+  if (!enabled || !permissionsGranted) {
+    return;
+  }
+
+  const response = await requestBackgroundDebugStatus(false);
+  const status = document.getElementById("sdkStatusText");
+  if (response.ok && response.state?.initialized) {
+    status.textContent = "Enabled (running)";
+  } else if (response.ok) {
+    status.textContent = "Enabled (initializing)";
+  } else {
+    status.textContent = "Enabled (status unavailable)";
+  }
+}
+
+async function setupSdkControls() {
+  const btn = document.getElementById("sdkToggleBtn");
+  btn.addEventListener("click", async () => {
+    btn.disabled = true;
+    const enabled = await getSdkEnabledPreference();
+
+    if (!enabled) {
+      const granted = await requestSdkHostPermissions();
+      if (!granted) {
+        await refreshSdkControls();
+        btn.disabled = false;
+        return;
+      }
+
+      await setSdkEnabledPreference(true);
+      await requestBackgroundDebugStatus(true);
+      await refreshSdkControls();
+      btn.disabled = false;
+      return;
+    }
+
+    await setSdkEnabledPreference(false);
+    await notifyBackgroundDisableSdk();
+    await removeSdkHostPermissions();
+    await refreshSdkControls();
+    btn.disabled = false;
+  });
+
+  await refreshSdkControls();
 }
 
 function computeStreak(habit) {
@@ -204,6 +310,19 @@ function formatDebugStatus(state) {
 }
 
 async function requestBackgroundDebugStatus(forceInit = false) {
+  if (forceInit) {
+    const [enabled, permissionsGranted] = await Promise.all([
+      getSdkEnabledPreference(),
+      hasSdkHostPermissions(),
+    ]);
+    if (!enabled || !permissionsGranted) {
+      return {
+        ok: false,
+        error: "Enable Optional ZeroGPU features first.",
+      };
+    }
+  }
+
   const type = forceInit ? "zerogpu:forceInit" : "zerogpu:getStatus";
   return new Promise((resolve) => {
     chrome.runtime.sendMessage({ type }, (response) => {
@@ -269,6 +388,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
   resetBtn.addEventListener("click", handleResetToday);
+  await setupSdkControls();
   setupDebugMode();
 
   const state = await loadState();

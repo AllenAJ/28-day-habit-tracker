@@ -24,6 +24,7 @@ The extension initializes the ZeroGPU Browser SDK in an offscreen document so ML
 
 Notes:
 - SDK state is managed by the service worker and offscreen page (`background.js` + `offscreen.js`).
+- ZeroGPU host access is requested only after explicit user action via the popup "Optional ZeroGPU features" toggle.
 - Bundled runtime assets are local under `vendor/` (no remotely hosted scripts).
 - ONNX Runtime WASM binaries are packaged locally (`vendor/ort-wasm-simd.wasm`, `vendor/ort-wasm.wasm`).
 - A hidden debug panel is available in the popup with `Ctrl+Shift+D` to inspect SDK init status.

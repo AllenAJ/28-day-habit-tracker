@@ -120,6 +120,38 @@ body {
   transform: scale(0.95);
 }
 
+.sdk-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sdk-copy {
+  min-width: 0;
+}
+
+.sdk-title {
+  font-size: 11px;
+  color: var(--text);
+}
+
+.sdk-status {
+  margin-top: 2px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.sdk-toggle-btn {
+  padding: 4px 0;
+  flex-shrink: 0;
+}
+
 .habits {
   max-height: 300px;
   overflow-y: auto;

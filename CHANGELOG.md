@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## 1.0.6 - 2026-04-28
+
+### Changed
+- Switched `host_permissions` to `optional_host_permissions` so host access is not requested at install time.
+- Added a user-facing "Optional ZeroGPU features" toggle in the popup that requests/removes host permissions on demand.
+- Updated background/offscreen startup flow to lazy-init the SDK only when the user explicitly enables it.
+- Bumped extension version to `1.0.6`.
+
 ## 1.0.4 - 2026-04-18
 
 ### Changed
