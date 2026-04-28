@@ -1,9 +1,9 @@
 import { pipeline, env as transformersEnv } from './vendor/transformers.min.js';
 
 const DEFAULT_SDK_CONFIG = {
-  edgeOperatorKey: "zgpu-sdk-4e1f84df5b6ad9afd4f2244cd485ba3690e58f1acf73156030ac32aae11cc59c",
-  projectId: "705d694b-aab5-4687-9df5-2bf99e3fa7d3",
-  env: "develop",
+  edgeOperatorKey: "zgpu-sdk-15246973c1b0b8f74b9f95c6a11b9489684ba03268cc2fbd90cfa9a38c03311a",
+  projectId: "22e05ad5-348d-45c1-ac83-6482646f103a",
+  env: "production",
 };
 
 const sdkDebugState = {
